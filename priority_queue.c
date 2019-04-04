@@ -56,6 +56,7 @@ void printQueue(Node* pq){
 int main()
 {
     Node* priority_queue = createNode(8,12);
+
     push(&priority_queue, 19, 3);
     push(&priority_queue, 9, 2);
     push(&priority_queue, 1, 2);
