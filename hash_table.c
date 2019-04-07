@@ -31,24 +31,37 @@ void printHashTable(struct hashTable ht[], int ht_size)
 void insert(struct hashTable ht[], int ht_size, int key)
 {
     int index = key % ht_size;
-    while(ht[index].value != 0 && ht[index].key != -1)
+    int i = index;
+    while(i<ht_size)
     {
         /* Key not present */
-        /* if(!ht[index].value) { */
-        /*     ht[index].key = key; */
-        /*     ht[index].value = 1; */
-        /*     return; */
-        /* } */
-        /* /1* Key already present *1/ */
-        /* else if(ht[index].key = key){ */
-        /*     ht[index].value++; */
-        /*     return */
-        /* } */
+        if(!ht[i].value) {
+            ht[i].key = key;
+            ht[i].value = 1;
+            return;
+        }
+        /* Key already present */
+        else if(ht[i].key = key){
+            ht[i].value++;
+            return;
+        }
+        /* Linear probing */
+        i = (i+1) % ht_size;
+    }
+    printf("Htable full");
+    return;
+}
+
+// Search position without ht_size limit
+void insertSimplified(struct hashTable ht[], int ht_size, int key)
+{
+    int index = key % ht_size;
+    while(ht[index].value != 0 && ht[index].key != -1)
+    {
         index = (index+1) % ht_size;
     }
     ht[index].key = key;
     ht[index].value = 1;
-    /* printf("Htable full"); */
     return;
 }
 
