@@ -34,10 +34,10 @@ int partition(int A[], int low, int high)
 
 void quickSort(int A[], int low, int high)
 {
-    if(low<high){
+    if(low<high){ //if segment only one element, avoid 
         int p = partition(A, low, high);
-        quickSort(A, low, p-1);
-        quickSort(A, p+1, high);
+        quickSort(A, low, p-1); // left part
+        quickSort(A, p+1, high); // right part
     }
 }
 
