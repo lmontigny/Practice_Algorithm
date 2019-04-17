@@ -7,7 +7,6 @@ struct Queue
 {
     int arr[SIZE_QUEUE];
     int front;
-    int rear;
 };
 
 struct Node
@@ -30,14 +29,6 @@ struct Node* createNode(int vertex)
     node->next = NULL;
 
     return node;
-}
-
-struct Queue* createQueue()
-{
-    struct Queue* q = (struct Queue*)malloc(sizeof(*q));
-    q->front = -1;
-    q->rear = -1;
-    return q;
 }
 
 struct Graph* createGraph(int nb_vertices)
@@ -89,64 +80,19 @@ void printGraph(struct Graph* graph)
 
 }
 
-void enqueue(struct Queue* queue, int vertex)
+void dfs(struct Graph* graph, int vertex)
 {
-    if(queue->rear == SIZE_QUEUE - 1) return; // full
-
-    // Just change the front to 0
-    // Fill with the rear counter
-    if(queue->front == -1){
-        queue->front = 0;
-    }
-    queue->rear++;
-    queue->arr[queue->rear] = vertex;
-}
-
-int dequeue(struct Queue* queue)
-{
-    int item;
-    if(queue->rear == -1) return -1;
-
-    // Dequeue with the front counter
-    // Front counter was only switched to 0 in the enqueue
-    item = queue->arr[queue->front];
-    queue->front++;
-    if(queue->front > queue->rear)
-        queue->front = queue->rear = -1;
-
-    return item;
-}
-
-void printQueue(struct Queue* queue)
-{
-    int i;
-    if(queue->rear == -1) printf("empty");
-
-    for(i=queue->front; i<queue->rear+1; i++){
-        printf("Queue: %d ", queue->arr[i]);
-    }
-    printf("\n");
-}
-
-void bfs(struct Graph* graph, int vertex)
-{
-    struct Queue* queue = createQueue();
+    /* Simplified compare to bfs */
+    /* no queue, just the adjacency list */
+    struct Node* neighboors = graph->adjLists[vertex];
     graph->visited[vertex] = 1;
-    enqueue(queue, vertex);
 
-    int i = 0;
-    while(queue->rear != -1){
-        printQueue(queue);
-        int v = dequeue(queue);
-        struct Node* neighboors = graph->adjLists[v];
-
-        while(neighboors){
-            if(!graph->visited[neighboors->vertex]){
-                graph->visited[neighboors->vertex] = 1;
-                enqueue(queue, neighboors->vertex);
-            }
-            neighboors = neighboors->next;
+    /* From the node, just go down in the tree */
+    while(neighboors){
+        if(!graph->visited[neighboors->vertex]){
+            dfs(graph, neighboors->vertex);
         }
+        neighboors = neighboors->next;
     }
 }
 
@@ -160,7 +106,7 @@ int main()
     addNode(graph, 1, 3);
     printGraph(graph);
 
-    bfs(graph, 2);
+    dfs(graph, 2);
 
     int i;
     for(i=0; i<graph->nb_vertices; i++){
